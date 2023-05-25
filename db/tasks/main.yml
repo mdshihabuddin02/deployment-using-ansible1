@@ -1,0 +1,59 @@
+---
+# tasks file for db
+- name: Installation Services
+  apt:
+    name:
+    - mysql-server
+    - mysql-client
+    - python3-mysqldb
+    state: present 
+  tags: install
+
+- name: Start ufw
+  service: 
+    name: ufw 
+    state: started 
+    enabled: yes
+
+- name: Enable MySQL port in firewall
+  ufw:
+    rule: allow
+    port: "3306"
+    proto: tcp
+
+- name: Reload firewall configuration
+  ufw:
+    state: reloaded
+
+- name: Start MySQL service
+  service:
+    name: mysql
+    state: started
+
+- name: MySQL pass setup
+  mysql_user:
+    name: ''
+    user: root
+    password: '{{ mysql_root_password }}'
+    login_user: root
+    login_password: '{{ mysql_root_password }}'
+    login_unix_socket: /var/run/mysqld/mysqld.sock
+
+- name: Copy mysql config
+  copy:
+    src: mysqld.cnf
+    dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+  notify:
+    - Restart MySQL
+  tags: Copy mysql config
+  tags: create database
+
+- name: Execute multiple MySQL queries
+  community.mysql.mysql_query:
+    login_host: '127.0.0.1'
+    login_user: '{{ mysql_root_user }}' 
+    login_password: '{{ mysql_root_password }}'
+    query:
+      - CREATE USER '{{ dbuser }}'@'%' IDENTIFIED BY '{{ dbpassword }}';
+      - ALTER USER '{{ dbuser }}'@'%' IDENTIFIED WITH mysql_native_password BY '{{ dbpassword }}';
+      - GRANT ALL ON *.* TO '{{ dbuser }}'@'%';

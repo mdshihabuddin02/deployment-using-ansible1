@@ -1,0 +1,13 @@
+---
+# tasks file for git
+
+    - name: Install Git package
+      package:
+        name: git
+        state: present
+
+    - name: Clone git repository
+      git:
+        repo: 
+        dest: /opt/
+      when: ansible_os_family == 'Debian'

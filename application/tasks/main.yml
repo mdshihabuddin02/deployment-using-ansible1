@@ -1,0 +1,13 @@
+---
+# tasks file for application
+
+    - name: Change permissions of application directory
+      file:
+        path: /opt/application-runner
+        state: directory
+        recurse: yes
+        mode: "0777"
+
+    - name: Execute run.sh
+      command: sh /opt/run.sh
+ 

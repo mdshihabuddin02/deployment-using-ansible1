@@ -1,0 +1,7 @@
+---
+- name: deploy-main
+  hosts: db
+  become: true
+  roles:
+    - db
+

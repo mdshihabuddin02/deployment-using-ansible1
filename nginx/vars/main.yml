@@ -4,4 +4,5 @@
     nginx_package:
       - nginx
     http_port: 80
-    http_host: 192.168.56.103
+    http_host: 192.168.0.105
+    port: 8085

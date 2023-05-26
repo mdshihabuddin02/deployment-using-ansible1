@@ -12,20 +12,20 @@
 
 - name: Copy Nginx sites-available file
   template:
-    src: nginx.j2
-    dest: /etc/nginx/sites-available/nginxc.conf.j2
-    owner: root
-    group: root
-    mode: "0644"
-  notify:
-    - Restart Nginx
+    src: nginxc.conf.j2
+    dest: /etc/nginx/sites-available/default
   
-
 - name: Enable Nginx virtual host
   file:
-    src: /etc/nginx/sites-available/nginxc.conf.j2
-    dest: /etc/nginx/sites-enabled/nginxc.conf.j2
+    src: /etc/nginx/sites-available/default
+    dest: /etc/nginx/sites-enabled/default
     state: link
   notify:
     - Restart Nginx
+
+- name: Restart Nginx web server
+  service:
+    name: nginx
+    state: reloaded
+
 

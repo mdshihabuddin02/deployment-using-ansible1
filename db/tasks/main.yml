@@ -30,14 +30,14 @@
     name: mysql
     state: started
 
-- name: MySQL pass setup
-  mysql_user:
-    name: ''
-    user: root
-    password: '{{ mysql_root_password }}'
-    login_user: root
-    login_password: '{{ mysql_root_password }}'
-    login_unix_socket: /var/run/mysqld/mysqld.sock
+- name: Copy SQL
+  template:
+    src: config/file.sql.j2
+    dest: /tmp/file.sql
+
+- name: Load Inventory Data
+  shell: sudo mysql -e "source /tmp/file.sql"
+  tags: run sql
 
 - name: Copy mysql config
   copy:
@@ -46,14 +46,3 @@
   notify:
     - Restart MySQL
   tags: Copy mysql config
-  tags: create database
-
-- name: Execute multiple MySQL queries
-  community.mysql.mysql_query:
-    login_host: '127.0.0.1'
-    login_user: '{{ mysql_root_user }}' 
-    login_password: '{{ mysql_root_password }}'
-    query:
-      - CREATE USER '{{ dbuser }}'@'%' IDENTIFIED BY '{{ dbpassword }}';
-      - ALTER USER '{{ dbuser }}'@'%' IDENTIFIED WITH mysql_native_password BY '{{ dbpassword }}';
-      - GRANT ALL ON *.* TO '{{ dbuser }}'@'%';

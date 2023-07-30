@@ -1,0 +1,8 @@
+---
+- name: deploy-web
+  hosts: web
+  become: true
+
+  roles:
+    - web
+

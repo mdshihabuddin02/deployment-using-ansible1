@@ -1,0 +1,31 @@
+---
+# tasks file for web
+- name: Deploy env
+  copy:
+    src: locallibrary/.env
+    dest: /home/shi/pro/.env
+
+- name: Change permissions of application directory
+  file:
+    path: /home/shi/pro/
+    state: directory
+    recurse: yes
+    mode: "0777"
+
+- name: Configuring environment 
+  shell:
+    cmd: |
+      sudo apt-get update
+      sudo apt install python3-pip -y
+      sudo apt install python3-virtualenv -y
+      virtualenv /home/shi/pro/app-env 
+      source /home/shi/pro/app-env/bin/activate
+      pip3 install -r/home/shi/pro/requirements.txt
+      python3 /home/shi/pro/manage.py makemigrations
+      python3 /home/shi/pro/manage.py migrate
+  tags: Configuring environment 
+
+- name: run 
+  shell: sudo systemctl start pyapp.service
+  tags: run
+

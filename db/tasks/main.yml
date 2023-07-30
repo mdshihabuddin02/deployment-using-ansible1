@@ -1,0 +1,48 @@
+---
+# tasks file for db
+- name: Installation Services
+  apt:
+    name:
+    - mysql-server
+    - mysql-client
+    - python3-mysqldb
+    state: present 
+  tags: install
+
+- name: Start ufw
+  service: 
+    name: ufw 
+    state: started 
+    enabled: yes
+
+- name: Enable MySQL port in firewall
+  ufw:
+    rule: allow
+    port: "3306"
+    proto: tcp
+
+- name: Reload firewall configuration
+  ufw:
+    state: reloaded
+
+- name: Start MySQL service
+  service:
+    name: mysql
+    state: started
+
+- name: Copy SQL
+  template:
+    src: config/file.sql.j2
+    dest: /tmp/file.sql
+
+- name: Load Inventory Data
+  shell: sudo mysql -e "source /tmp/file.sql"
+  tags: run sql
+
+- name: Copy mysql config
+  copy:
+    src: mysqld.cnf
+    dest: /etc/mysql/mysql.conf.d/mysqld.cnf
+  notify:
+    - Restart MySQL
+  tags: Copy mysql config

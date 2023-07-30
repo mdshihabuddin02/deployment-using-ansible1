@@ -1,5 +1,5 @@
 ---
-- name: deploy-main
+- name: deploy-web
   hosts: web
   become: true
 

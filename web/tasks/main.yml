@@ -26,8 +26,6 @@
   tags: Configuring environment 
 
 - name: run 
-  shell: python3 /home/shi/pro/manage.py runserver 0.0.0.0:8085
-  async: 6000
-  poll: 0
+  shell: sudo systemctl start pyapp.service
   tags: run
 

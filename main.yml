@@ -4,6 +4,5 @@
 
   roles:
     - git
-    - nginx
-    # - python
-    #     - application
+    - web
+

@@ -1,7 +1,0 @@
----
-- name: deploy-main
-  hosts: web
-  become: true
-  roles:
-    - nginx
-

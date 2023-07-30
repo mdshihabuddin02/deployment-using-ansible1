@@ -1,7 +1,8 @@
 ---
-- name: deploy-main
+- name: deploy-db
   hosts: db
   become: true
+
   roles:
     - db
 

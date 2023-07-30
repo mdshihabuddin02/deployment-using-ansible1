@@ -1,8 +1,0 @@
----
-- name: deploy-main
-  hosts: 192.168.56.110
-  become: true
-
-  roles:
-    - db
-

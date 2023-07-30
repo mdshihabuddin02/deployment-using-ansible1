@@ -1,7 +1,0 @@
----
-# vars file for nginx
-
-    nginx_package:
-      - nginx
-    http_port: 80
-    http_host: 192.168.56.103
